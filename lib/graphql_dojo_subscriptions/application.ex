@@ -6,7 +6,8 @@ defmodule GraphqlDojoSubscriptions.Application do
   def start(_type, _args) do
     children = [
       {Phoenix.PubSub, name: GraphqlDojoSubscriptions.PubSub},
-      GraphqlDojoSubscriptionsWeb.Endpoint
+      GraphqlDojoSubscriptionsWeb.Endpoint,
+      {Absinthe.Subscription, GraphqlDojoSubscriptionsWeb.Endpoint}
     ]
 
     opts = [strategy: :one_for_one, name: GraphqlDojoSubscriptions.Supervisor]
