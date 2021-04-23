@@ -28,8 +28,11 @@ defmodule GraphqlDojoSubscriptions.MixProject do
     [
       {:absinthe, "~> 1.6"},
       {:absinthe_phoenix, "~> 2.0"},
+      {:ecto, "~> 3.6"},
+      {:ecto_sql, "~> 3.6"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.5.7"},
+      {:postgrex, ">= 0.0.0"},
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:plug_cowboy, "~> 2.0"}

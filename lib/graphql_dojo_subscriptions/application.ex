@@ -5,6 +5,7 @@ defmodule GraphqlDojoSubscriptions.Application do
 
   def start(_type, _args) do
     children = [
+      GraphqlDojoSubscriptions.Repo,
       {Phoenix.PubSub, name: GraphqlDojoSubscriptions.PubSub},
       GraphqlDojoSubscriptionsWeb.Endpoint,
       {Absinthe.Subscription, GraphqlDojoSubscriptionsWeb.Endpoint}

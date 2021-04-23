@@ -7,6 +7,14 @@
 # General application configuration
 use Mix.Config
 
+config :graphql_dojo_subscriptions, ecto_repos: [GraphqlDojoSubscriptions.Repo]
+
+config :graphql_dojo_subscriptions, GraphqlDojoSubscriptions.Repo,
+  database: "graphql_dojo_subscriptions_repo",
+  username: "docker",
+  password: "docker",
+  hostname: "localhost"
+
 # Configures the endpoint
 config :graphql_dojo_subscriptions, GraphqlDojoSubscriptionsWeb.Endpoint,
   url: [host: "localhost"],
