@@ -1,19 +1,7 @@
 # GraphqlDojoSubscriptions
 
-Generate this project with:
-
-```
-mix phx.new $PROJECT_DIR --no-html --no-ecto --no-webpack --no-gettext --no-dashboard --install
-```
-
-Add the two dependencies:
-
-```
-{:absinthe, "~> 1.6"},
-{:absinthe_phoenix, "~> 2.0"},
-```
-
-Create the GraphQL schema `GraphqlDojoSubscriptionsWeb.GraphQL.Schema`.
+In order to use subscriptions you only have to change a few things in your GraphQL app.
+https://hexdocs.pm/absinthe/subscriptions.html is a good starting point.
 
 ## GraphQL subscriptions
 
@@ -39,48 +27,31 @@ We'll check if we can catch some absinthe messages later.
 You can also implement the `Absinthe.Subscription.PubSub` behaviour, if
 you want to base your subscriptions on something other than `Phoenix.PubSub`.
 
-### Setup
+## Our example
 
-You must convert your websocket to an Absinthe socket by adding the line:
-
-```
-use Absinthe.Phoenix.Socket, schema: GraphqlDojoSubscriptionsWeb.GraphQL.Schema
-```
-
-And your endpoint has to be converted to an `Absinthe.Phoenix.Endpoint`:
-```
-use Absinthe.Phoenix.Endpoint
-```
-
-And you also have to start the subscription in your supervision tree.
-
-```
-{Absinthe.Subscription, GraphqlDojoSubscriptionsWeb.Endpoint}
-```
-
-The docs published on HexDocs does not state this, so it's better to read the readme in
-the `absinthe_phoenix` repo.
+In our example we have an overly simplified system that manages blog posts.
+A blog post has an author, a title and some text.
+The storage backend is Postgres.
 
 ### Example subscription
 
+Currently we can do only one kind of subscription to see newly published posts
+of our favourite author:
+
 ```
 subscription {
-  sendMeStuff {
-    stuff
+  newBlogPosts {
+    author
+    title
+    text
+    id
   }
 }
 ```
 
-Then elsewhere in the code we can publish data and the subscriber will receive it.
-
+To test our subscription we can use `Absinthe.Subscription.publish/3`:
 ```
-Absinthe.Subscription.publish(GraphqlDojoSubscriptionsWeb.Endpoint, %{stuff: "message"}, [send_me_stuff: "here_is_some_stuff"])
+Absinthe.Subscription.publish(GraphqlDojoSubscriptionsWeb.Endpoint, %{author: "Someone", title: "Very Good Book", text: "Intentionally left blank", id: "555"}, [new_blog_posts: "*", new_blog_posts: "Someone"])
 ```
 
-where `GraphqlDojoSubscriptionsWeb.Endpoint` is our `Absinthe.Phoenix` endpoint,
-`%{stuff: "message"}` is the actual data, and `[send_me_stuff: "here_is_some_stuff"]`
-are basically naming the subscription (`send_me_stuff`) and the topic (`"here_is_some_stuff"`).
-If we haven't looked into the code yet, now it's about time.
-
-
-
+Note that we send the data to everyone who is subscribed to all authors (`*`) and anyone who subscribe to the particular author.

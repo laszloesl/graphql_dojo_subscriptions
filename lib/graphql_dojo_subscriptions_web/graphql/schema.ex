@@ -10,6 +10,10 @@ defmodule GraphqlDojoSubscriptionsWeb.GraphQL.Schema do
     import_fields(:blog_post_mutations)
   end
 
+  subscription do
+    import_fields(:blog_post_subscriptions)
+  end
+
   def context(context) do
     Map.put(context, :context, %{pubsub: GraphqlDojoSubscriptions.PubSub})
   end

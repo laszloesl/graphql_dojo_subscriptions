@@ -29,4 +29,14 @@ defmodule GraphqlDojoSubscriptionsWeb.GraphQL.Schema.BlogPost do
       end)
     end
   end
+
+  object :blog_post_subscriptions do
+    field :new_blog_posts, :blog_post do
+      arg(:author, :string)
+
+      config(fn args, _resolution ->
+        {:ok, topic: Map.get(args, :author, "*")}
+      end)
+    end
+  end
 end
